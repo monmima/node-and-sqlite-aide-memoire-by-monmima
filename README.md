@@ -71,4 +71,4 @@ If you wish to edit the database, you'll need **DB Browser for SQLite**. Open a 
 Open a Terminal window and follow these steps:
 
 1. Type npm install
-2. Type nodemon / node index / node index.js
+2. Type npm run serve / npm run start
