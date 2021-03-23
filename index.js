@@ -10,6 +10,11 @@ const sqlite3 = require("sqlite3");
 const dbname = "test.db";
 
 /**
+ * define the number of your port
+ */
+const PORT = process.env.PORT || 5000
+
+/**
  * using express and the body-parser module
  */
 const app = express();
@@ -141,8 +146,8 @@ app.use(function (req, res, next) {
 /**
  * handling connections to the server
  */
-app.listen("3000", () => {
-    console.log("Server started on port 3000");
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
 });
 
 /**
