@@ -1,4 +1,4 @@
-# node-and-mysqlite-aide-memoire-by-monmima
+# node-and-sqlite-aide-memoire-by-monmima
 
 ## Node.js + SQLite
 
@@ -73,19 +73,19 @@ If you wish to edit the database, you'll need **DB Browser for SQLite**. Open a 
 Open a Terminal window and follow these steps:
 
 1. Type npm install
-2. Type npm run serve / npm run start
+2. Type **npm run serve** or **npm run start**
 
-__
+___
 
 ## Deploying the project on Heroku from Linux Mint
 
 This project can be [found online on Heroku](https://node-and-sqlite.herokuapp.com/).
 
-My references here were a [tutorial on YouTube by Jonny Kalambay](https://www.youtube.com/watch?v=MxfxiR8TVNU) and an answer on the [Trailblazer Community](https://trailblazers.salesforce.com/answers?id=9064S000000DHq1QAG). The second reference was needed because I had this error message in the Terminal window when I was trying to push the project to Heroku. I basically needed to add "HEAD" somewhere to have things work properly.
+My references here were a [tutorial on YouTube by Jonny Kalambay](https://www.youtube.com/watch?v=MxfxiR8TVNU) and an answer on the [Trailblazer Community](https://trailblazers.salesforce.com/answers?id=9064S000000DHq1QAG). The second reference was needed because I had this error message in the Terminal window when I was trying to push the project to Heroku. I basically needed to add "HEAD" somewhere to have things work properly, as explained below.
 
 1. In the Terminal, type **touch Procfile** to create the Procfile, which tells Heroku how to run your app
 2. In the Procfile, type **web: node index.js**, assuming **index.js** is the root file of you project
-3. In the root file (index.js), the port variable should look like this: **const PORT = process.env.PORT || 5000**
+3. In the root file (still assuming it's **index.js**), the port variable should look like this: **const PORT = process.env.PORT || 5000**
 4. In the Terminal window, type **git status** to make sure the app is initialized as a Git repository
 5. Type **heroku git:remote -a node-and-sqlite**, assuming the name of the repository is **node-and-sqlite**
 6. On the Heroku web site, you can find more information about the name of your project under the **deploy** tab.
