@@ -7,7 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser'); // needed to read the content from the form
 
 const sqlite3 = require("sqlite3");
-const dbname = "test.db";
+const dbname = "tatoeba.db";
 
 /**
  * define the number of your port
@@ -30,7 +30,7 @@ let db = new sqlite3.Database(dbname, err => {
 
     console.log(`Database started on ${dbname}`);
 
-    db.all("SELECT * FROM students_tb", (err, data) => {
+    db.all("SELECT * FROM fr_de_tb", (err, data) => {
         console.log(data);
     });
 
@@ -54,7 +54,7 @@ let db = new sqlite3.Database(dbname, err => {
  * reading all entries
  */
 app.get("/get-posts", (req, res) => {
-    db.all("SELECT * FROM students_tb", (err, data) => {
+    db.all("SELECT * FROM fr_de_tb", (err, data) => {
         console.log(data);
 
         if (err) {
@@ -71,7 +71,7 @@ app.get("/get-posts", (req, res) => {
 
 // reading single posts
 app.get("/get-post/:id", (req, res) => {
-    db.get(`SELECT * FROM students_tb WHERE Field1 = ${req.params.id}`, (err, data) => {
+    db.get(`SELECT * FROM fr_de_tb WHERE id = ${req.params.id}`, (err, data) => {
         console.log(data);
 
         if (err) {
@@ -123,16 +123,127 @@ app.get('/ejs-2', (req, res) => {
  * EJS template 3
  */
 app.get('/ejs-3', (req, res) => {
-    db.all("SELECT * FROM students_tb", (err, data) => {
+    db.all("SELECT * FROM fr_de_tb", (err, data) => {
         if (err) {
             // throw err;
             console.log(err);
         } else {
             console.log(data);
 
-            res.status(200).render("ejs-3", { students : data });
+            res.status(200).render("ejs-3", { data : data });
         }
     });
+});
+
+/**
+ * EJS template 4
+ */
+ app.get('/ejs-4', (req, res) => {
+    res.status(200).render("ejs-4");
+});
+
+/**
+ * EJS template 5
+ */
+app.get('/get-data-form', (req, res) => {
+
+    // corpus
+    const corpus = 
+    [
+        "fr_de_tb"
+    ]
+
+    const generateQuery = () => {
+        let queryString;
+        let union = "";
+
+        /**
+         * This nested SELECT statement needs to be done because
+         * of a SQLite quirk with ORDER BY.
+         * 
+         * https://scottstoecker.wordpress.com/2020/06/05/using-order-by-with-a-union-in-sqlite/
+         */
+        // queryString = "SELECT * FROM (";
+        
+        /**
+         * loop on each corpus item to build the query
+         */
+        // for (let i = 0; i < corpus.length; i++) {
+        //     queryString += `SELECT * FROM ${corpus[i]}
+        //     WHERE ${req.query.language}
+        //     LIKE "%${req.query.searchQuery}%"`;
+        // } // end of loop
+
+        queryString = `SELECT * FROM ${corpus}
+        WHERE ${req.query.language}
+        LIKE "%${req.query.searchQuery}%"`;
+
+        /**
+         * end of nested statement that needs to be performed
+         * because of a SQLite quirk with ORDER BY
+         */
+        // queryString += "\n\n)";
+
+        /**
+         * order by length in characters
+         */
+        queryString += `\n\nORDER BY LENGTH(passage_fr);`;
+        // console.log(queryString);
+
+        return queryString;
+    }
+
+    // // string to search
+    // const queryString = `
+    //     SELECT * FROM le_grand_meaulnes_tb
+    //     WHERE ${req.query.language}
+    //     LIKE "%${req.query.searchQuery}%";
+    // `;
+
+    /**
+     * generates the query before running it
+     */
+    const generatedQuery = generateQuery();
+
+    db.all(generatedQuery, (err, data) => {
+
+        // new stuff
+        if (err) {
+            res.status(200).send("There seems to be a problem with this query...");
+            console.log(err);
+            // console.log(`The SQLite query is: "${sql}"...`);
+
+        } else {
+            console.log(`Displaying data for "${req.query.searchQuery}"...`);
+            // console.log(`The SQLite query is: "${sql}"...`);
+
+            for (let i = 0; i < data.length; i++) {
+                const re = new RegExp(req.query.searchQuery, "gi");
+                let newStrFr = data[i].passage_fr.replace(re, `<strong>${req.query.searchQuery.toUpperCase()}</strong>`);
+                let newStrEn = data[i].passage_autre.replace(re, `<strong>${req.query.searchQuery.toUpperCase()}</strong>`);
+
+                data[i].passage_fr = newStrFr;
+                data[i].passage_autre = newStrEn;
+            }
+
+            // query language on the left
+            let resultPage = "";
+            if (req.query.language === "passage_fr") {
+                resultPage = "ejs-5";
+            } else {
+                resultPage = "ejs-5";
+            }
+
+            res.status(200).render(resultPage, {
+                data : data,
+                queryTerm: req.query.searchQuery
+            });
+        }
+        // end new stuff
+
+    });
+
+
 });
 
 /**

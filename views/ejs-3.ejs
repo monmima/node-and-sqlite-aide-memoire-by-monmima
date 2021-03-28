@@ -33,22 +33,22 @@
     <p>The items below come from the database. <strong>If nothing shows up in gray boxes below</strong>, go back to the main page of the app and populate the database.</p>
 
     <div>
-        <% for (let i of students) { %>
+        <% for (let i = 0; i < data.length && i < 1000; i++) { %>
             <div class="database">
                 <p class="database-name">
                     
-                    <a href="/get-post/<%= i.Field1 %>" title="<%= i.first_name %>">
-                        <%= i.first_name %>: ID <%= i.Field1 %>
+                    <a href="/get-post/<%= data[i].id %>" title="<%= data[i].passage_fr %>">
+                        <%= data[i].passage_fr %>: ID <%= data[i].id %>
                     </a>
 
                 </p>
-                <p><%= i.first_name %> <%= i.last_name %>, <%= i.age %></p>
+                <p><%= data[i].passage_fr %> <%= data[i].passage_au %>, <%= data[i].id %></p>
             </div>
         <% } %>
     </div>
     
     <%- include("footer") %>
-    <script src="js/random-message.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
 
