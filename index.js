@@ -30,9 +30,12 @@ let db = new sqlite3.Database(dbname, err => {
 
     console.log(`Database started on ${dbname}`);
 
-    db.all("SELECT * FROM fr_de_tb", (err, data) => {
-        console.log(data);
-    });
+    /**
+     * to print database content to console
+     */
+    // db.all("SELECT * FROM fr_de_tb", (err, data) => {
+    //     console.log(data);
+    // });
 
     /**
         SQL Operations in SQLite
@@ -258,7 +261,7 @@ app.use(function (req, res, next) {
  * handling connections to the server
  */
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+    console.log(`Server started on port http://localhost:${PORT}`);
 });
 
 /**
