@@ -36,6 +36,8 @@ ___
 
 ### Possible Issues
 
+## SQL
+
 When I created this aide-mémoire for MySQL in a similar project I mentionned earlier, I ran into different issues:
 
 - I needed to use full text indexes to return only complete words and not just strings.
@@ -43,6 +45,10 @@ When I created this aide-mémoire for MySQL in a similar project I mentionned ea
 - I ran into an "Invalid column count in CSV input on line 1." error message while importing CSV.
 
 I don't know how likely these are to happen in SQLite too, so I advise you to read the [documentation for my Node.js and MySQL](https://github.com/monmima/node-and-sql-aide-memoire-by-monmima) project if you do.
+
+## Fixing NPM Errors
+
+At some point, I ran into issues with a directory not being accessible in reading mode in another NodeJS project. A [YouTube tutorial by HACK ANONS](https://www.youtube.com/results?search_query=robotjs+fix) helped me with this.
 
 ### EJS: You don't want to learn it for now? No problem!
 
